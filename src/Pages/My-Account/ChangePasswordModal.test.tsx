@@ -12,6 +12,14 @@ function renderWithAuth(
   ui: React.ReactElement,
   { token = "fake-token", onClose = vi.fn() } = {},
 ) {
+  const authContextValue = {
+    token,
+    userId: "fake-user",
+    login: vi.fn(),
+    logout: vi.fn(),
+    loadingAuth: false,
+  };
+
   return {
     onClose,
     ...render(
@@ -19,7 +27,9 @@ function renderWithAuth(
        * The component reads the token from AuthContext.
        * We provide a minimal mock context for testing.
        */
-      <AuthContext.Provider value={{ token }}>{ui}</AuthContext.Provider>,
+      <AuthContext.Provider value={authContextValue}>
+        {ui}
+      </AuthContext.Provider>,
     ),
   };
 }
